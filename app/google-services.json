@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "716073699773",
+    "project_id": "covid-19-test-finder",
+    "storage_bucket": "covid-19-test-finder.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:716073699773:android:76bfe49f6c328e23032ad4",
+        "android_client_info": {
+          "package_name": "com.covid19.test_finder"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "716073699773-eu3si5f8c1aml9kcmpve5lvmnf87ttn9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyALhLlSgDNJIFMvEhZTGSXBRJ2UQfLjybk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "716073699773-eu3si5f8c1aml9kcmpve5lvmnf87ttn9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
