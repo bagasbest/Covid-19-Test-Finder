@@ -55,7 +55,7 @@ public class SituationFragment extends Fragment implements OnMapReadyCallback {
         binding = FragmentSituationBinding.inflate(inflater, container, false);
 
         fusedLocationProviderClient =
-                LocationServices.getFusedLocationProviderClient(getActivity());
+                LocationServices.getFusedLocationProviderClient(requireActivity());
 
 
         // UNTUK MENGETAHUI LOKASI PENGGUNA SAAT INI
@@ -70,10 +70,10 @@ public class SituationFragment extends Fragment implements OnMapReadyCallback {
     private void fetchLocation() {
         // MENGECEK APAKAH PENGGUNA SUDAH MENYALAKAN PERMISSION LOKASI ATAU BELUM, JIKA BELUM MAKA TAMPILKAN PERMISSION LOKASI, UNTUK MENDETEKSI LOKASI SAAT INI
         if (ActivityCompat.checkSelfPermission(
-                requireContext(),
+                requireActivity(),
                 Manifest.permission.ACCESS_FINE_LOCATION
         ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                requireContext(),
+                requireActivity(),
                 Manifest.permission.ACCESS_COARSE_LOCATION
         ) != PackageManager.PERMISSION_GRANTED
         ) {
@@ -104,9 +104,9 @@ public class SituationFragment extends Fragment implements OnMapReadyCallback {
         LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
         MarkerOptions markerOptions = new MarkerOptions().position(latLng).title("Hai, Ini merupakan lokasi kamu").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
         googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
-        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 5));
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 7));
         googleMap.addMarker(markerOptions);
-        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+        if (ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED
         ) {
             googleMap.setMyLocationEnabled(true);
@@ -227,7 +227,6 @@ public class SituationFragment extends Fragment implements OnMapReadyCallback {
         googleMap.addMarker(new MarkerOptions().position(gorontalo).title("Gorontalo").snippet("Tanggal: 30 September 2021\nKasus: 11,735\nSembuh: 11,152\nKematian: 458"));
 
 
-        // untuk nampilin dateTime
         googleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
             @Override
             public View getInfoWindow(@NonNull Marker marker) {

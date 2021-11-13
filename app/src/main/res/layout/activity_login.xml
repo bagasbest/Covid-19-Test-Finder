@@ -15,8 +15,8 @@
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_marginTop="30dp"
             android:contentDescription="@string/image"
             android:src="@drawable/icon"
@@ -28,7 +28,7 @@
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Covid-19 Test Finder\nLogin Page"
+            android:text="Covid-19 Test Finder"
             android:textAlignment="center"
             android:textColor="@color/black"
             android:layout_marginTop="16dp"
@@ -37,25 +37,38 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
+        <TextView
+            android:id="@+id/textView28"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:text="Login Page"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView" />
+
 
         <TextView
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="30dp"
             android:text="Email:"
+            android:layout_marginTop="16dp"
             android:textColor="@color/black"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView" />
+            app:layout_constraintTop_toBottomOf="@+id/textView28" />
 
         <EditText
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="50dp"
             android:id="@+id/email"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
             android:background="@drawable/bg_rounded"
             android:backgroundTint="@color/background"
             app:layout_constraintEnd_toEndOf="parent"
@@ -82,11 +95,11 @@
         <EditText
             android:id="@+id/password"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="50dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="10dp"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
             android:layout_marginEnd="16dp"
             android:background="@drawable/bg_rounded"
             android:backgroundTint="@color/background"
@@ -144,7 +157,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
-                android:text="Register Here!"
+                android:text="@string/register_here"
                 android:textColor="@color/blue"
                 android:textSize="18sp" />
 

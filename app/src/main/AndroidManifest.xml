@@ -15,7 +15,19 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Covid19TestFinder">
         <activity
-            android:name=".home.home.place.PlaceAddActivity"
+            android:name=".home.history.HistoryDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".home.home.payment.PaymentActivity"
+            android:exported="false" />
+        <activity
+            android:name=".home.home.order.OrderActivity"
+            android:exported="false" />
+        <activity
+            android:name=".home.home.place.PlaceDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".home.home.place.PlaceListActivity"
             android:exported="false" />
         <activity
             android:name=".home.home.place.PlaceActivity"
