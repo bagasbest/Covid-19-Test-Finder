@@ -48,13 +48,13 @@ public class AboutFragment extends Fragment {
                                 .load(R.drawable.icon)
                                 .into(binding.dp);
 
-                        binding.username.setText("" + documentSnapshot.get("username"));
-                        binding.name.setText("" + documentSnapshot.get("name"));
-                        binding.phone.setText("" + documentSnapshot.get("phone"));
-                        binding.email.setText("" + documentSnapshot.get("email"));
-                        binding.gender.setText("" + documentSnapshot.get("gender"));
-                        binding.age.setText("" + documentSnapshot.get("age"));
-                        binding.nik.setText("" + documentSnapshot.get("nik"));
+                        binding.username.setText("Username: " + documentSnapshot.get("username"));
+                        binding.name.setText("Name: " + documentSnapshot.get("name"));
+                        binding.phone.setText("Phone: " + documentSnapshot.get("phone"));
+                        binding.email.setText("Email: " + documentSnapshot.get("email"));
+                        binding.gender.setText("Gender: " + documentSnapshot.get("gender"));
+                        binding.age.setText("Age: " + documentSnapshot.get("age"));
+                        binding.nik.setText("NIK: " + documentSnapshot.get("nik"));
 
                     }
                 });

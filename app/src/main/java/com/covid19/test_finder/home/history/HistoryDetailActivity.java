@@ -60,26 +60,6 @@ public class HistoryDetailActivity extends AppCompatActivity {
         binding.result.setText(model.getResult());
         binding.phone.setText("Consultant   " + model.getPhone());
 
-        if(model.getStatus().equals("Not Paid") || model.getStatus().equals("Waiting")) {
-            if(model.getPaymentProof().equals("")) {
-                binding.imageHint.setVisibility(View.VISIBLE);
-
-            } else {
-                binding.imageHint.setVisibility(View.VISIBLE);
-                Glide.with(this)
-                        .load(model.getPaymentProof())
-                        .into(binding.paymentProof);
-            }
-        } else {
-            Glide.with(this)
-                    .load(model.getPaymentProof())
-                    .into(binding.paymentProof);
-
-            binding.imageView3.setVisibility(View.VISIBLE);
-        }
-
-
-
 
         binding.backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -194,7 +174,38 @@ public class HistoryDetailActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         if(("" + documentSnapshot.get("role")).equals("admin")) {
-                            binding.acceptPayment.setVisibility(View.VISIBLE);
+                            if(!model.getStatus().equals("Paid")) {
+                                binding.acceptPayment.setVisibility(View.VISIBLE);
+                            }
+
+                            if(!model.getPaymentProof().equals("")) {
+                                Glide.with(HistoryDetailActivity.this)
+                                        .load(model.getPaymentProof())
+                                        .into(binding.paymentProof);
+                            }
+
+
+                            binding.imageView3.setVisibility(View.VISIBLE);
+
+                        } else {
+                            if(!model.getStatus().equals("Paid")) {
+                                if(model.getPaymentProof().equals("")) {
+                                    binding.imageHint.setVisibility(View.VISIBLE);
+
+                                } else {
+                                    binding.imageHint.setVisibility(View.VISIBLE);
+                                    Glide.with(HistoryDetailActivity.this)
+                                            .load(model.getPaymentProof())
+                                            .into(binding.paymentProof);
+                                }
+                            } else {
+                                Glide.with(HistoryDetailActivity.this)
+                                        .load(model.getPaymentProof())
+                                        .into(binding.paymentProof);
+
+                                binding.imageView3.setVisibility(View.VISIBLE);
+                            }
+
                         }
                     }
                 });
@@ -284,6 +295,7 @@ public class HistoryDetailActivity extends AppCompatActivity {
     }
 
 
+    @SuppressLint("SetTextI18n")
     private void showSuccessDialog() {
         new AlertDialog.Builder(this)
                 .setTitle("Upload Payment Proof Success")
@@ -292,6 +304,7 @@ public class HistoryDetailActivity extends AppCompatActivity {
                 .setCancelable(false)
                 .setPositiveButton("OK", (dialogInterface, i) -> {
                     dialogInterface.dismiss();
+                    binding.status.setText("Waiting");
                 })
                 .show();
     }

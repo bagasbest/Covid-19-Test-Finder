@@ -45,7 +45,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView detail, location, date, checkMethod;
+        private TextView detail, location, date, checkMethod, status;
         private ImageView img;
 
         public ViewHolder(@NonNull View itemView) {
@@ -55,6 +55,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
             date = itemView.findViewById(R.id.dateTime);
             checkMethod = itemView.findViewById(R.id.checkMethod);
             img = itemView.findViewById(R.id.img);
+            status = itemView.findViewById(R.id.textView18);
         }
 
         @SuppressLint("SetTextI18n")
@@ -66,7 +67,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
             location.setText("Location: " + model.getLocation());
             date.setText("Date: " + model.getDateTime());
             checkMethod.setText("Method: " + model.getCheckMethod());
-
+            status.setText("Payment Status: " + model.getStatus());
 
             detail.setOnClickListener(new View.OnClickListener() {
                 @Override

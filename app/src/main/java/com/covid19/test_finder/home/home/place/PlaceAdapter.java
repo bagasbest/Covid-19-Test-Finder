@@ -24,8 +24,10 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder> 
     private final ArrayList<PlaceModel> listPlace = new ArrayList<>();
 
     private final String page;
-    public PlaceAdapter(String page) {
+    private final ArrayList<String> distance;
+    public PlaceAdapter(String page, ArrayList<String> distance) {
         this.page = page;
+        this.distance = distance;
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -50,7 +52,7 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.bind(listPlace.get(position));
+        holder.bind(listPlace.get(position), distance);
     }
 
     @Override
@@ -75,7 +77,7 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder> 
         }
 
         @SuppressLint("SetTextI18n")
-        public void bind(PlaceModel model) {
+        public void bind(PlaceModel model, ArrayList<String> distanceList) {
 
             /// number format digunakan untuk money currency, misal IDR. 100.000
             NumberFormat formatter = new DecimalFormat("#,###");
@@ -89,11 +91,16 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder> 
             address.setText(model.getAddress());
             price.setText("Rp. " + formatter.format(model.getSwab()) + " ~ " + "Rp. " + formatter.format(model.getPcr()));
 
+            if(distanceList != null) {
+                distance.setText(distanceList.get(getAdapterPosition()));
+            }
+
             cv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(itemView.getContext(), PlaceDetailActivity.class);
                     intent.putExtra(PlaceDetailActivity.EXTRA_PLACE, model);
+                    intent.putExtra(PlaceDetailActivity.EXTRA_DISTANCE, distanceList.get(getAdapterPosition()));
                     itemView.getContext().startActivity(intent);
                 }
             });

@@ -6,8 +6,6 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.location.Location;
 import android.os.Bundle;
 
@@ -18,18 +16,16 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Handler;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.covid19.test_finder.R;
@@ -51,17 +47,14 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.maps.android.SphericalUtil;
 
 import org.jetbrains.annotations.NotNull;
-import org.w3c.dom.Text;
 
-import java.lang.reflect.Array;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public class HomeFragment extends Fragment implements OnMapReadyCallback {
@@ -72,7 +65,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     private static final int permissionCode = 101;
     private PlaceAdapter adapter;
     private ProgressDialog mProgressDialog;
-    private ArrayList<PlaceModel> place = new ArrayList<>();
+    private final ArrayList<PlaceModel> place = new ArrayList<>();
+    private final ArrayList<String> distance = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -86,7 +80,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         mProgressDialog.setCanceledOnTouchOutside(false);
         mProgressDialog.show();
 
-        initRecyclerView();
+        initRecyclerView(distance);
         initViewModel();
 
         fusedLocationProviderClient =
@@ -109,16 +103,56 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         binding.seeALL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getActivity(), PlaceListActivity.class));
+                Intent intent = new Intent(getActivity(), PlaceListActivity.class);
+                intent.putExtra(PlaceListActivity.EXTRA_DISTANCE, distance);
+                startActivity(intent);
+            }
+        });
+
+        binding.view3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getActivity());
+                bottomSheetDialog.setContentView(R.layout.bottom_sheet);
+
+                RecyclerView rvLocation = bottomSheetDialog.findViewById(R.id.rvLocation);
+                ProgressBar progressBar = bottomSheetDialog.findViewById(R.id.progressBar);
+
+                rvLocation.setLayoutManager(new LinearLayoutManager(getActivity()));
+                adapter = new PlaceAdapter("fragment", distance);
+                rvLocation.setAdapter(adapter);
+
+                PlaceViewModel viewModel = new ViewModelProvider(getActivity()).get(PlaceViewModel.class);
+
+                progressBar.setVisibility(View.VISIBLE);
+                viewModel.setListPlace(place);
+                viewModel.getListPlace().observe(getViewLifecycleOwner(), place -> {
+                    if (place.size() > 0) {
+                        adapter.setData(place);
+                    }
+                    progressBar.setVisibility(View.GONE);
+                });
+
+                bottomSheetDialog.show();
+
             }
         });
 
     }
 
-    private void initRecyclerView() {
-        binding.rvLocation.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new PlaceAdapter("fragment");
-        binding.rvLocation.setAdapter(adapter);
+    private void initRecyclerView(ArrayList<String> distance) {
+
+        if (distance.size() == 0) {
+            binding.rvLocation.setLayoutManager(new LinearLayoutManager(getActivity()));
+            adapter = new PlaceAdapter("fragment", null);
+            binding.rvLocation.setAdapter(adapter);
+        } else {
+            binding.rvLocation.setLayoutManager(new LinearLayoutManager(getActivity()));
+            adapter = new PlaceAdapter("fragment", distance);
+            binding.rvLocation.setAdapter(adapter);
+        }
+
+
     }
 
 
@@ -166,6 +200,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     }
 
 
+    @SuppressLint({"PotentialBehaviorOverride", "DefaultLocale"})
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         /// number format digunakan untuk money currency, misal IDR. 100.000
@@ -188,9 +223,13 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
             for (int i = 0; i < 15; i++) {
                 LatLng latLngLocation = new LatLng(Double.parseDouble(place.get(i).getLon()), Double.parseDouble(place.get(i).getLat()));
-                googleMap.addMarker(new MarkerOptions().position(latLngLocation).title(place.get(i).getLocation()).snippet("Swab Test: Rp. " + formatter.format(place.get(i).getSwab()) + "\nPCR Test: Rp." + formatter.format(place.get(0).getPcr()) + "|" + place.get(i).getImg()));
-
+                String distances = String.format("%.2f", SphericalUtil.computeDistanceBetween(latLng, latLngLocation) / 1000) + " km";
+                googleMap.addMarker(new MarkerOptions().position(latLngLocation).title(place.get(i).getLocation()).snippet("Swab Test: Rp. " + formatter.format(place.get(i).getSwab()) + "\nPCR Test: Rp." + formatter.format(place.get(0).getPcr()) + "\nDistance: " + distances + "|" + place.get(i).getImg()));
+                distance.add(distances);
             }
+
+            initRecyclerView(distance);
+            adapter.setData(place);
 
             googleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
                 @Override
@@ -207,10 +246,15 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
                     location.setText(marker.getTitle());
                     if (!marker.getTitle().equals("Your Location")) {
+                        img.setVisibility(View.VISIBLE);
+                        snippet.setVisibility(View.VISIBLE);
                         Glide.with(requireActivity())
                                 .load(Objects.requireNonNull(marker.getSnippet()).substring(marker.getSnippet().indexOf("|") + 1))
                                 .into(img);
                         snippet.setText(marker.getSnippet().substring(0, marker.getSnippet().indexOf("|")));
+                    } else {
+                        img.setVisibility(View.GONE);
+                        snippet.setVisibility(View.GONE);
                     }
                     return row;
                 }

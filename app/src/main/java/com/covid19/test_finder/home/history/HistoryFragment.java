@@ -49,14 +49,22 @@ public class HistoryFragment extends Fragment {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         String role = "" + documentSnapshot.get("role");
-                        initRecyclerView();
+                        initRecyclerView(role);
                         initViewModel(role, uid);
                     }
                 });
     }
 
-    private void initRecyclerView() {
-        binding.rvHistory.setLayoutManager(new LinearLayoutManager(getActivity()));
+    private void initRecyclerView(String role) {
+        if (role.equals("user")) {
+            LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+            layoutManager.setReverseLayout(true);
+            layoutManager.setStackFromEnd(true);
+            binding.rvHistory.setLayoutManager(layoutManager);
+        } else {
+            binding.rvHistory.setLayoutManager(new LinearLayoutManager(getActivity()));
+        }
+
         adapter = new HistoryAdapter();
         binding.rvHistory.setAdapter(adapter);
     }
@@ -65,7 +73,7 @@ public class HistoryFragment extends Fragment {
         HistoryViewModel viewModel = new ViewModelProvider(this).get(HistoryViewModel.class);
 
         binding.progressBar.setVisibility(View.VISIBLE);
-        if(role.equals("admin")) {
+        if (role.equals("admin")) {
             viewModel.setListHistoryByAll();
         } else {
             viewModel.setListHistoryByUserId(uid);

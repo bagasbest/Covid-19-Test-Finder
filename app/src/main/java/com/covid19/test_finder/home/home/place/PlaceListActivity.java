@@ -13,6 +13,7 @@ import com.covid19.test_finder.databinding.ActivityPlaceAddBinding;
 
 public class PlaceListActivity extends AppCompatActivity {
 
+    public static final String EXTRA_DISTANCE = "distance";
     private ActivityPlaceAddBinding binding;
     private String filter = "no";
     private PlaceAdapter adapter;
@@ -62,7 +63,7 @@ public class PlaceListActivity extends AppCompatActivity {
 
     private void initRecyclerView() {
         binding.rvLocation.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new PlaceAdapter("activity");
+        adapter = new PlaceAdapter("activity", getIntent().getStringArrayListExtra(EXTRA_DISTANCE));
         binding.rvLocation.setAdapter(adapter);
     }
 

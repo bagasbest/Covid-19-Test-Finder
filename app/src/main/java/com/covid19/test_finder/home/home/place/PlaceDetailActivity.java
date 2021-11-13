@@ -20,6 +20,7 @@ import java.text.NumberFormat;
 public class PlaceDetailActivity extends AppCompatActivity {
 
     public static final String EXTRA_PLACE = "place";
+    public static final String EXTRA_DISTANCE = "distance";
     private ActivityPlaceDetailBinding binding;
     private PlaceModel model;
 
@@ -33,7 +34,7 @@ public class PlaceDetailActivity extends AppCompatActivity {
         SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
 
         model = getIntent().getParcelableExtra(EXTRA_PLACE);
-        String rating = "Rating: " + sharedPref.getString(model.getUid(), "0.0");
+        String rating = "Rating: " + sharedPref.getString(model.getUid(), "5.0");
         /// number format digunakan untuk money currency, misal IDR. 100.000
         NumberFormat formatter = new DecimalFormat("#,###");
 
@@ -44,6 +45,7 @@ public class PlaceDetailActivity extends AppCompatActivity {
         binding.location.setText(model.getLocation());
         binding.address.setText(model.getAddress());
         binding.rating.setText(rating);
+        binding.distance.setText("Distance: " + getIntent().getStringExtra(EXTRA_DISTANCE));
         if(model.getSwab() > 0) {
             binding.swab.setVisibility(View.VISIBLE);
         }
