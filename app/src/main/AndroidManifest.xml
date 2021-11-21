@@ -15,6 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Covid19TestFinder">
         <activity
+            android:name=".home.history.HistoryDetailResultActivity"
+            android:exported="false" />
+        <activity
             android:name=".home.history.HistoryDetailActivity"
             android:exported="false" />
         <activity

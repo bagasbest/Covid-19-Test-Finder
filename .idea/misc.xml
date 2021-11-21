@@ -7,10 +7,11 @@
         <entry key="..\:/TUBES_GALERI/Covid19TestFinder/app/src/main/res/drawable/bg_rounded2.xml" value="0.21944444444444444" />
         <entry key="..\:/TUBES_GALERI/Covid19TestFinder/app/src/main/res/drawable/bg_rounded3.xml" value="0.24871794871794872" />
         <entry key="..\:/TUBES_GALERI/Covid19TestFinder/app/src/main/res/drawable/ic_baseline_add_location_24.xml" value="0.2526041666666667" />
-        <entry key="..\:/TUBES_GALERI/Covid19TestFinder/app/src/main/res/layout/activity_history_detail.xml" value="0.2" />
+        <entry key="..\:/TUBES_GALERI/Covid19TestFinder/app/src/main/res/layout/activity_history_detail.xml" value="0.264" />
+        <entry key="..\:/TUBES_GALERI/Covid19TestFinder/app/src/main/res/layout/activity_history_detail_result.xml" value="0.264" />
         <entry key="..\:/TUBES_GALERI/Covid19TestFinder/app/src/main/res/layout/activity_home.xml" value="0.4429065743944637" />
         <entry key="..\:/TUBES_GALERI/Covid19TestFinder/app/src/main/res/layout/activity_login.xml" value="0.264" />
-        <entry key="..\:/TUBES_GALERI/Covid19TestFinder/app/src/main/res/layout/activity_main.xml" value="0.176" />
+        <entry key="..\:/TUBES_GALERI/Covid19TestFinder/app/src/main/res/layout/activity_main.xml" value="0.2" />
         <entry key="..\:/TUBES_GALERI/Covid19TestFinder/app/src/main/res/layout/activity_order.xml" value="0.264" />
         <entry key="..\:/TUBES_GALERI/Covid19TestFinder/app/src/main/res/layout/activity_payment.xml" value="0.264" />
         <entry key="..\:/TUBES_GALERI/Covid19TestFinder/app/src/main/res/layout/activity_place.xml" value="0.4" />
@@ -20,7 +21,7 @@
         <entry key="..\:/TUBES_GALERI/Covid19TestFinder/app/src/main/res/layout/bottom_sheet.xml" value="0.264" />
         <entry key="..\:/TUBES_GALERI/Covid19TestFinder/app/src/main/res/layout/bottom_sheey.xml" value="0.11499493414387031" />
         <entry key="..\:/TUBES_GALERI/Covid19TestFinder/app/src/main/res/layout/custom_snippet.xml" value="0.2" />
-        <entry key="..\:/TUBES_GALERI/Covid19TestFinder/app/src/main/res/layout/fragment_about.xml" value="0.2" />
+        <entry key="..\:/TUBES_GALERI/Covid19TestFinder/app/src/main/res/layout/fragment_about.xml" value="0.264" />
         <entry key="..\:/TUBES_GALERI/Covid19TestFinder/app/src/main/res/layout/fragment_history.xml" value="0.2" />
         <entry key="..\:/TUBES_GALERI/Covid19TestFinder/app/src/main/res/layout/fragment_home.xml" value="0.264" />
         <entry key="..\:/TUBES_GALERI/Covid19TestFinder/app/src/main/res/layout/fragment_situation.xml" value="0.23645833333333333" />

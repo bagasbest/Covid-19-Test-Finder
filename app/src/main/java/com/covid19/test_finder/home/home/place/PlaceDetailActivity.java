@@ -52,7 +52,7 @@ public class PlaceDetailActivity extends AppCompatActivity {
         if(model.getPcr() > 0) {
             binding.pcr.setVisibility(View.VISIBLE);
         }
-        binding.price.setText("SWAB Price: Rp." + formatter.format(model.getSwab()) + " ~ PCR Price: Rp." + formatter.format(model.getPcr()));
+        binding.price.setText("SWAB, Rp." + formatter.format(model.getSwab()) + " ~ PCR, Rp." + formatter.format(model.getPcr()));
 
         binding.orderBtn.setOnClickListener(new View.OnClickListener() {
             @Override

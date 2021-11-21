@@ -55,6 +55,8 @@ import org.jetbrains.annotations.NotNull;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Objects;
 
 public class HomeFragment extends Fragment implements OnMapReadyCallback {
@@ -66,7 +68,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     private PlaceAdapter adapter;
     private ProgressDialog mProgressDialog;
     private final ArrayList<PlaceModel> place = new ArrayList<>();
-    private final ArrayList<String> distance = new ArrayList<>();
+    private final ArrayList<Double> distance = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -80,8 +82,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         mProgressDialog.setCanceledOnTouchOutside(false);
         mProgressDialog.show();
 
-        initRecyclerView(distance);
-        initViewModel();
+   //     initRecyclerView();
+        initViewModel("initState");
 
         fusedLocationProviderClient =
                 LocationServices.getFusedLocationProviderClient(getActivity());
@@ -105,6 +107,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), PlaceListActivity.class);
                 intent.putExtra(PlaceListActivity.EXTRA_DISTANCE, distance);
+                intent.putExtra(PlaceListActivity.EXTRA_LAT, currentLocation.getLatitude());
+                intent.putExtra(PlaceListActivity.EXTRA_LON, currentLocation.getLongitude());
                 startActivity(intent);
             }
         });
@@ -119,15 +123,21 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                 ProgressBar progressBar = bottomSheetDialog.findViewById(R.id.progressBar);
 
                 rvLocation.setLayoutManager(new LinearLayoutManager(getActivity()));
-                adapter = new PlaceAdapter("fragment", distance);
+                adapter = new PlaceAdapter("fragment", 0.0,0.0);
                 rvLocation.setAdapter(adapter);
 
                 PlaceViewModel viewModel = new ViewModelProvider(getActivity()).get(PlaceViewModel.class);
 
                 progressBar.setVisibility(View.VISIBLE);
-                viewModel.setListPlace(place);
+                viewModel.setListPlace(place, distance);
                 viewModel.getListPlace().observe(getViewLifecycleOwner(), place -> {
                     if (place.size() > 0) {
+                        Collections.sort(place, new Comparator<PlaceModel>() {
+                            @Override
+                            public int compare(PlaceModel model, PlaceModel t1) {
+                                return Double.compare(model.getDistance(), t1.getDistance());
+                            }
+                        });
                         adapter.setData(place);
                     }
                     progressBar.setVisibility(View.GONE);
@@ -140,33 +150,35 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
     }
 
-    private void initRecyclerView(ArrayList<String> distance) {
-
-        if (distance.size() == 0) {
-            binding.rvLocation.setLayoutManager(new LinearLayoutManager(getActivity()));
-            adapter = new PlaceAdapter("fragment", null);
-            binding.rvLocation.setAdapter(adapter);
-        } else {
-            binding.rvLocation.setLayoutManager(new LinearLayoutManager(getActivity()));
-            adapter = new PlaceAdapter("fragment", distance);
-            binding.rvLocation.setAdapter(adapter);
-        }
-
-
+    private void initRecyclerView() {
+        binding.rvLocation.setLayoutManager(new LinearLayoutManager(getActivity()));
+        adapter = new PlaceAdapter("fragment", 0.0, 0.0);
+        binding.rvLocation.setAdapter(adapter);
     }
 
 
-    private void initViewModel() {
+    private void initViewModel(String state) {
         PlaceViewModel viewModel = new ViewModelProvider(this).get(PlaceViewModel.class);
 
         binding.progressBar.setVisibility(View.VISIBLE);
-        viewModel.setListPlace(place);
-        viewModel.getListPlace().observe(getViewLifecycleOwner(), place -> {
-            if (place.size() > 0) {
-                adapter.setData(place);
-            }
-            binding.progressBar.setVisibility(View.GONE);
-        });
+        if(state.equals("lateState")) {
+            viewModel.setListPlace(place, distance);
+            viewModel.getListPlace().observe(getViewLifecycleOwner(), place -> {
+                if (place.size() > 0) {
+                    Collections.sort(place, new Comparator<PlaceModel>() {
+                        @Override
+                        public int compare(PlaceModel model, PlaceModel t1) {
+                            return Double.compare(model.getDistance(), t1.getDistance());
+                        }
+                    });
+                    adapter.setData(place);
+                }
+                binding.progressBar.setVisibility(View.GONE);
+            });
+        } else {
+            viewModel.setListPlace(place, null);
+        }
+
     }
 
     private void fetchLocation() {
@@ -225,11 +237,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                 LatLng latLngLocation = new LatLng(Double.parseDouble(place.get(i).getLon()), Double.parseDouble(place.get(i).getLat()));
                 String distances = String.format("%.2f", SphericalUtil.computeDistanceBetween(latLng, latLngLocation) / 1000) + " km";
                 googleMap.addMarker(new MarkerOptions().position(latLngLocation).title(place.get(i).getLocation()).snippet("Swab Test: Rp. " + formatter.format(place.get(i).getSwab()) + "\nPCR Test: Rp." + formatter.format(place.get(0).getPcr()) + "\nDistance: " + distances + "|" + place.get(i).getImg()));
-                distance.add(distances);
+                distance.add(SphericalUtil.computeDistanceBetween(latLng, latLngLocation) / 1000);
             }
 
-            initRecyclerView(distance);
-            adapter.setData(place);
+            initRecyclerView();
+            initViewModel("lateState");
 
             googleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
                 @Override

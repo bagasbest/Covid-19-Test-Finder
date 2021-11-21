@@ -14,6 +14,7 @@ public class PlaceModel implements Parcelable {
     private String lat;
     private long swab;
     private long pcr;
+    private double distance;
 
    public PlaceModel(){
 
@@ -29,6 +30,7 @@ public class PlaceModel implements Parcelable {
         lat = in.readString();
         swab = in.readLong();
         pcr = in.readLong();
+        distance = in.readDouble();
     }
 
     @Override
@@ -42,6 +44,7 @@ public class PlaceModel implements Parcelable {
         dest.writeString(lat);
         dest.writeLong(swab);
         dest.writeLong(pcr);
+        dest.writeDouble(distance);
     }
 
     @Override
@@ -131,5 +134,13 @@ public class PlaceModel implements Parcelable {
 
     public void setPcr(long pcr) {
         this.pcr = pcr;
+    }
+
+    public double getDistance() {
+        return distance;
+    }
+
+    public void setDistance(double distance) {
+        this.distance = distance;
     }
 }

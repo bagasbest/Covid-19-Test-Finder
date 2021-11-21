@@ -37,6 +37,12 @@ public class HistoryDetailActivity extends AppCompatActivity {
     private String dp;
     private static final int REQUEST_FROM_GALLERY = 1001;
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        populateHistoryResult();
+    }
+
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,8 +63,9 @@ public class HistoryDetailActivity extends AppCompatActivity {
         binding.dateTime.setText(model.getDateTime());
         binding.checkMethod.setText(model.getCheckMethod());
         binding.price.setText("Rp. " + formatter.format(model.getPrice()));
-        binding.result.setText(model.getResult());
         binding.phone.setText("Consultant   " + model.getPhone());
+
+
 
 
         binding.backButton.setOnClickListener(new View.OnClickListener() {
@@ -93,6 +100,32 @@ public class HistoryDetailActivity extends AppCompatActivity {
                 showConfirmationDeleteHistory();
             }
         });
+
+        binding.imageView3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(HistoryDetailActivity.this, HistoryDetailResultActivity.class);
+                intent.putExtra(HistoryDetailResultActivity.EXTRA_RESULT, binding.result.getText().toString());
+                intent.putExtra(HistoryDetailResultActivity.EXTRA_HISTORY_ID, model.getHistoryId());
+                startActivity(intent);
+            }
+        });
+
+    }
+
+    private void populateHistoryResult() {
+        FirebaseFirestore
+                .getInstance()
+                .collection("history")
+                .document(model.getHistoryId())
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @SuppressLint("SetTextI18n")
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        binding.result.setText("" + documentSnapshot.get("result"));
+                    }
+                });
     }
 
     private void showConfirmationDeleteHistory() {
